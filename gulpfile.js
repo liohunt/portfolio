@@ -28,7 +28,7 @@ var path = {
   },
   build: {
     // build paths
-    dir: "theme/",
+    dir: "docs/",  //changed this to link correct index.html file to github pages
   },
 };
 
