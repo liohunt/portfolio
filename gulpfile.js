@@ -25,6 +25,7 @@ var path = {
     blur: "source/images/**/*.+(jpg|jpeg|webp)",
     fonts: "source/fonts/**/*.+(eot|ttf|woff|woff2|otf)",
     static: "source/static/**/*",
+    pdfs: "source/pdfs/**/*.+(pdf)",
   },
   build: {
     // build paths
@@ -168,9 +169,20 @@ gulp.task("static", function () {
   return gulp.src(path.src.static).pipe(gulp.dest(path.build.dir));
 });
 
+// pdfs
+gulp.task("pdfs", function () {
+  return gulp.src(path.src.pdfs)
+    .pipe(gulp.dest(path.build.dir + "pdfs/"))
+    .pipe(
+      bs.reload({
+        stream: true,
+      })
+    );
+});
+
 // Clean Theme Folder
 gulp.task("clean", function (cb) {
-  rimraf("./theme", cb);
+  rimraf("./docs", cb);
 });
 
 // Watch Task
@@ -182,6 +194,7 @@ gulp.task("watch", function () {
   gulp.watch(path.src.images, gulp.series("images"));
   gulp.watch(path.src.fonts, gulp.series("fonts"));
   gulp.watch(path.src.plugins, gulp.series("plugins"));
+  gulp.watch(path.src.pdfs, gulp.series("pdfs"));
 });
 
 // dev Task
@@ -196,6 +209,7 @@ gulp.task(
     "fonts",
     "plugins",
     "static",
+    "pdfs",
     gulp.parallel("watch", function () {
       bs.init({
         server: {
@@ -217,7 +231,8 @@ gulp.task(
     "images",
     "fonts",
     "plugins",
-    "static"
+    "static",
+    "pdfs",
   )
 );
 
@@ -234,12 +249,13 @@ gulp.task(
     "images-blur",
     "fonts",
     "plugins",
-    "static"
+    "static",
+    "pdfs",
   )
 );
 
 // Deploy Task
 gulp.task(
   "deploy",
-  gulp.series("html", "js", "scss", "images", "fonts", "plugins", "static")
+  gulp.series("html", "js", "scss", "images", "fonts", "plugins", "static", "pdfs")
 );
